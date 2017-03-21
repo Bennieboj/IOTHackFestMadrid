@@ -29,3 +29,5 @@ C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\bi
 C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\bin\Antlr3.Runtime.pdb
 C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\obj\Release\IoTMadridAccessControl.dll
 C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\obj\Release\IoTMadridAccessControl.pdb
+C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\bin\Swashbuckle.Core.dll
+C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\bin\WebActivatorEx.dll

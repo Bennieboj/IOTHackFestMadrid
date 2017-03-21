@@ -30,3 +30,5 @@ C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\bi
 C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\obj\Debug\IoTMadridAccessControl.csprojResolveAssemblyReference.cache
 C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\obj\Debug\IoTMadridAccessControl.dll
 C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\obj\Debug\IoTMadridAccessControl.pdb
+C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\bin\Swashbuckle.Core.dll
+C:\Users\bencl\Desktop\hackfest\IoTMadridAccessControl\IoTMadridAccessControl\bin\WebActivatorEx.dll
