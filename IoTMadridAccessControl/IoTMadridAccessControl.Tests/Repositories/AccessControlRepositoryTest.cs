@@ -33,21 +33,18 @@ CREATE DATABASE [TESTIOTMadrid];
             _testDbConnection.Open();
             var command2 = new SqlCommand(@"
 CREATE TABLE [dbo].[AccessControlList](
-	[Id] [int] IDENTITY NOT NULL,
+	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[AccessDevice] [varchar](255) NOT NULL,
 	[AccessDeviceType] [int] NOT NULL,
- CONSTRAINT [ADADType] PRIMARY KEY CLUSTERED 
+	[LocationId] [int] NOT NULL DEFAULT ((1)),
+	[ServiceProfileId] [int] NOT NULL DEFAULT ((1)),
+ CONSTRAINT [ADADTypeLocationId] PRIMARY KEY NONCLUSTERED 
 (
 	[AccessDevice] ASC,
-	[AccessDeviceType] ASC
+	[AccessDeviceType] ASC,
+	[LocationId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
-);
-
-CREATE NONCLUSTERED INDEX [IX_AccessControlList] ON [AccessControlList]
-(
-	[AccessDevice], [AccessDeviceType] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-", _testDbConnection);
+)", _testDbConnection);
             command2.ExecuteNonQuery();
             _testDbConnection.Close();
         }
@@ -84,7 +81,7 @@ truncate table [AccessControlList];
             var repo = new AccessControlRepository(_testDbConnectionString);
 
             // Act
-            var result = repo.HasAccess("test", 1);
+            var result = repo.HasAccess("test", 1, 1);
 
             // Assert
             Assert.AreEqual(false, result);
@@ -94,11 +91,11 @@ truncate table [AccessControlList];
         public void GetByAccessDevice_NotFoundWrongRecord_Type_ReturnsFalse()
         {
             // Arrange
-            InsertValue("test", 2);
+            InsertValue("test", 1, 1);
             var repo = new AccessControlRepository(_testDbConnectionString);
 
             // Act
-            var result = repo.HasAccess("test", 1);
+            var result = repo.HasAccess("test", 2, 1);
 
             // Assert
             Assert.AreEqual(false, result);
@@ -108,11 +105,25 @@ truncate table [AccessControlList];
         public void GetByAccessDevice_NotFoundWrongRecord_Name_ReturnsFalse()
         {
             // Arrange
-            InsertValue("test123", 1);
+            InsertValue("test", 1, 1);
             var repo = new AccessControlRepository(_testDbConnectionString);
 
             // Act
-            var result = repo.HasAccess("test", 1);
+            var result = repo.HasAccess("othername", 1, 1);
+
+            // Assert
+            Assert.AreEqual(false, result);
+        }
+
+        [TestMethod]
+        public void GetByAccessDevice_NotFoundWrongRecord_Location_ReturnsFalse()
+        {
+            // Arrange
+            InsertValue("test", 1, 1);
+            var repo = new AccessControlRepository(_testDbConnectionString);
+
+            // Act
+            var result = repo.HasAccess("test", 1, 2);
 
             // Assert
             Assert.AreEqual(false, result);
@@ -122,27 +133,28 @@ truncate table [AccessControlList];
         public void GetByAccessDevice_Found_ReturnsTrue()
         {
             // Arrange
-            InsertValue("test", 1);
+            InsertValue("test", 1, 1);
             var repo = new AccessControlRepository(_testDbConnectionString);
 
             // Act
-            var result = repo.HasAccess("test", 1);
+            var result = repo.HasAccess("test", 1, 1);
 
             // Assert
             Assert.AreEqual(true, result);
         }
 
-        private static void InsertValue(string accessDeviceId, int accessDeviceType)
+        private static void InsertValue(string accessDeviceId, int accessDeviceType, int locationId, int serviceProfileId = 1)
         {
             _testDbConnection.Open();
             var command = new SqlCommand(string.Format(@"
 INSERT INTO AccessControlList
 		(AccessDevice
-		,AccessDeviceType)
+		,AccessDeviceType
+        ,LocationId
+		,ServiceProfileId)
 	VALUES
-		('{0}'
-		,{1})
-", accessDeviceId, accessDeviceType), _testDbConnection);
+		('{0}',{1}, {2}, {3})
+", accessDeviceId, accessDeviceType, locationId, serviceProfileId), _testDbConnection);
             command.ExecuteNonQuery();
             _testDbConnection.Close();
         }

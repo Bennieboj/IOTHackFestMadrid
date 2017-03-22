@@ -22,7 +22,7 @@ namespace IoTMadridAccessControl.Tests.Controllers
             AccessController controller = new AccessController();
 
             // Act
-            var result = controller.Get("test", AccessDeviceType.LicensePlate);
+            var result = controller.Get("H647KPE", AccessDeviceType.LicensePlate, 1);
 
             // Assert
             Assert.AreEqual(true, result);

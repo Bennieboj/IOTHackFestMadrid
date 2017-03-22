@@ -15,10 +15,14 @@ BEGIN
 
 	INSERT INTO AccessControlList
 		(AccessDevice
-		,AccessDeviceType)
+		,AccessDeviceType
+		,LocationId
+		,ServiceProfileId)
 	VALUES
 		(CONVERT(varchar(255), NEWID())
-		,@Random)
+		,@Random
+		,1
+		,1)
 
 	SET @RowCount = @RowCount + 1
 END

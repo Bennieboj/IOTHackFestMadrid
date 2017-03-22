@@ -27,9 +27,9 @@ namespace IoTMadridAccessControl.Repositories
             retryPolicy.Retrying += testEHandler;           
         }
 
-        public bool HasAccess(string accessDeviceId, int accessDeviceType)
+        public bool HasAccess(string accessDeviceId, int accessDeviceType, int locationId)
         {
-            var command = new SqlCommand(string.Format("select Id from AccessControlList where AccessDevice = '{0}' and AccessDeviceType = {1}", accessDeviceId, accessDeviceType), _sqlConnection);
+            var command = new SqlCommand(string.Format("select Id from AccessControlList where AccessDevice = '{0}' and AccessDeviceType = {1} and LocationId = {2}", accessDeviceId, accessDeviceType, locationId), _sqlConnection);
             object result = null;
             try
             {
