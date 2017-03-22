@@ -1,16 +1,17 @@
 ﻿using System.Data.SqlClient;
 using IoTMadridAccessControl.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace IoTMadridAccessControl.Tests.Repositories
 {
     [TestClass]
     public class AccessControlRepositoryTest
     {
-        //private static readonly string _masterConnectionString = "Server=.;Initial Catalog=master;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=30;";
-        //private static readonly string _testDbConnectionString = "Server=.;Initial Catalog=TESTIOTMadrid;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=30;";
-        private static readonly string _masterConnectionString = "Server=tcp:iotmadrid.database.windows.net,1433;Initial Catalog=master;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=100;";
-        private static readonly string _testDbConnectionString = "Server=tcp:iotmadrid.database.windows.net,1433;Initial Catalog=TESTIOTMadrid;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=30;";
+        private static readonly string _masterConnectionString = "Server=.;Initial Catalog=master;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=30;";
+        private static readonly string _testDbConnectionString = "Server=.;Initial Catalog=TESTIOTMadrid;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=30;";
+        //private static readonly string _masterConnectionString = "Server=tcp:iotmadrid.database.windows.net,1433;Initial Catalog=master;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=100;";
+        //private static readonly string _testDbConnectionString = "Server=tcp:iotmadrid.database.windows.net,1433;Initial Catalog=TESTIOTMadrid;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=30;";
         private static readonly SqlConnection _masterConnection = new SqlConnection(_masterConnectionString);
         private static readonly SqlConnection _testDbConnection = new SqlConnection(_testDbConnectionString);
 
