@@ -12,5 +12,3 @@ where p.Id = 1
 --select sp.Name, t.DayOfWeek, t.StartHour, t.StartMinutes, t.EndHour, t.EndMinutes
 --from ServiceProfile sp
 --join Timeslot t on t.ServiceProfileId = sp.Id
-
-select top 10 * from AccessControlList order by Id desc
