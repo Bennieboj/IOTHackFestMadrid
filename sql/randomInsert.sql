@@ -28,6 +28,7 @@ BEGIN
 END
 
 
+
 --INSERT INTO AccessControlList
 --		(AccessDevice
 --		,AccessDeviceType)
@@ -60,3 +61,62 @@ END
 --		,1)
 
 --select top 10 * from AccessControlList
+
+
+
+--INSERT INTO [dbo].[ServiceProfile]
+--           ([Name])
+--     VALUES
+--           ('24x7')
+
+--INSERT INTO [dbo].[ServiceProfile]
+--           ([Name])
+--     VALUES
+--           ('Night')
+--GO
+
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (1, 0, 0, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (1, 1, 0, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (1, 2, 0, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (1, 3, 0, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (1, 4, 0, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (1, 5, 0, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (1, 6, 0, 0, 24, 0)
+
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 0, 17, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 0, 24, 0, 5, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 1, 17, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 1, 24, 0, 5, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 2, 17, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 2, 24, 0, 5, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 3, 17, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 3, 24, 0, 5, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 4, 17, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 4, 24, 0, 5, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 5, 17, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 5, 24, 0, 5, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 6, 17, 0, 24, 0)
+INSERT INTO [dbo].[TimeSlot] ([ServiceProfileId], [DayOfWeek] ,[StartHour] ,[StartMinutes] ,[EndHour] ,[EndMinutes])
+VALUES (2, 6, 24, 0, 5, 0)
+
+

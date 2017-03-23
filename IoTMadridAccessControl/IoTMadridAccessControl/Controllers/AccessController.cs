@@ -17,9 +17,18 @@ namespace IoTMadridAccessControl.Controllers
             AccessControlRepository = new AccessControlRepository("Server=tcp:iotmadrid.database.windows.net,1433;Initial Catalog=IOTMadrid;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=30;");
         }
 
-        public bool Get(string accessDeviceId, AccessDeviceType accessDeviceType, int locationId)
+        [HttpGet]
+        [Route("api/Access")]
+        public bool HasAccess(string accessDeviceId, AccessDeviceType accessDeviceType, int locationId)
         {
             return AccessControlRepository.HasAccess(accessDeviceId, (int)accessDeviceType, locationId);
+        }
+
+        [HttpGet]
+        [Route("api/GetServiceProfile")]
+        public List<TimeSlot> GetServiceProfile(string accessDeviceId, AccessDeviceType accessDeviceType, int locationId)
+        {
+            return AccessControlRepository.GetServiceProfile(accessDeviceId, (int)accessDeviceType, locationId);
         }
     }
 }

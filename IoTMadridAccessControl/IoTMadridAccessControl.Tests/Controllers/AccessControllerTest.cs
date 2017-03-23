@@ -16,16 +16,29 @@ namespace IoTMadridAccessControl.Tests.Controllers
 
 
         [TestMethod]
-        public void GetByAccessDevice()
+        public void CanGetHasAccess()
         {
             // Arrange
             AccessController controller = new AccessController();
 
             // Act
-            var result = controller.Get("H647KPE", AccessDeviceType.LicensePlate, 1);
+            var result = controller.HasAccess("H647KPE", AccessDeviceType.LicensePlate, 1);
 
             // Assert
             Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public void CanGetServiceProfile()
+        {
+            // Arrange
+            AccessController controller = new AccessController();
+
+            // Act
+            var result = controller.GetServiceProfile("H647KPE", AccessDeviceType.LicensePlate, 1);
+
+            // Assert
+            Assert.AreEqual("24x7", result.First().ServiceProfileName);
         }
 
     }
