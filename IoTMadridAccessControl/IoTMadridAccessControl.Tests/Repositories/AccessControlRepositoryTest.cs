@@ -116,35 +116,6 @@ CREATE TABLE [dbo].[Pool](
         }
 
         [TestMethod]
-        [Ignore]
-        public void tesst()
-        {
-            var sqlConnection = new SqlConnection(_testDbConnectionStringAzure);
-            SqlBulkCopy bulk = new SqlBulkCopy(sqlConnection);
-            bulk.DestinationTableName = "AccessControlList";
-            
-            sqlConnection.Open();
-            bulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("AccessDevice", "AccessDevice"));
-            bulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("AccessDeviceType", "AccessDeviceType"));
-            bulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("LocationId", "LocationId"));
-            bulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("ServiceProfileId", "ServiceProfileId"));
-
-            for (int j = 0; j < 20; j++)
-            {
-                var table = new DataTable();
-                table.Columns.AddRange(new[] { new DataColumn("AccessDevice", typeof(string)), new DataColumn("AccessDeviceType", typeof(int)), new DataColumn("LocationId", typeof(int)), new DataColumn("ServiceProfileId", typeof(int)) });
-
-                for (int i = 0; i < 100000; i++)
-                {
-                    var row = table.NewRow();
-                    row.ItemArray = new object[] { Guid.NewGuid().ToString().ToUpperInvariant(), 1, 1, 1 };
-                    table.Rows.Add(row);
-                }
-                bulk.WriteToServer(table);
-            }
-        }
-
-        [TestMethod]
         public void HasAccess_NotFoundEmpty_ReturnsFalse()
         {
             // Arrange
