@@ -1,0 +1,5 @@
+C:\Users\bencl\Desktop\hackfest\BulkInsert\BulkInsert\bin\Release\BulkInsert.exe.config
+C:\Users\bencl\Desktop\hackfest\BulkInsert\BulkInsert\bin\Release\BulkInsert.exe
+C:\Users\bencl\Desktop\hackfest\BulkInsert\BulkInsert\bin\Release\BulkInsert.pdb
+C:\Users\bencl\Desktop\hackfest\BulkInsert\BulkInsert\obj\Release\BulkInsert.exe
+C:\Users\bencl\Desktop\hackfest\BulkInsert\BulkInsert\obj\Release\BulkInsert.pdb

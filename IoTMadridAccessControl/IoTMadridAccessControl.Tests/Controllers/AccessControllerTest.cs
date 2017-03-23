@@ -41,5 +41,15 @@ namespace IoTMadridAccessControl.Tests.Controllers
             Assert.AreEqual("24x7", result.First().ServiceProfileName);
         }
 
+        [TestMethod]
+        public void CanExit()
+        {
+            // Arrange
+            AccessController controller = new AccessController();
+
+            // Act
+            controller.CanExit("H647KPE", AccessDeviceType.LicensePlate, 1);
+        }
+
     }
 }

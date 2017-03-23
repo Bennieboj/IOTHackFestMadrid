@@ -30,5 +30,12 @@ namespace IoTMadridAccessControl.Controllers
         {
             return AccessControlRepository.GetServiceProfile(accessDeviceId, (int)accessDeviceType, locationId);
         }
+
+        [HttpGet]
+        [Route("api/Exit")]
+        public bool CanExit(string accessDeviceId, AccessDeviceType accessDeviceType, int locationId)
+        {
+            return AccessControlRepository.CanExit(accessDeviceId, (int)accessDeviceType, locationId);
+        }
     }
 }
