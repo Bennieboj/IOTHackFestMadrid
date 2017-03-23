@@ -13,6 +13,7 @@
           <QueryStringParameters>
             <QueryStringParameter Name="accessDeviceId" Value="{{DataSource1.AccessData#csv.accessDeviceId}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
             <QueryStringParameter Name="accessDeviceType" Value="{{DataSource1.AccessData#csv.accessDeviceType}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+            <QueryStringParameter Name="locationid" Value="{{DataSource1.AccessData#csv.locationId}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
           </QueryStringParameters>
         </Request>
       </Items>

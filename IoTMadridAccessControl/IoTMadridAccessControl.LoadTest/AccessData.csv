@@ -1,11 +1,11 @@
-accessDeviceId, accessDeviceType
-"00006261-0621-481B-BB13-B89F722B1B8F",Nedap
-"00007B2C-ADD9-4741-9E58-6ADD53A5C7D2",LicensePlate
-"000090CC-F0BF-42A9-BEDD-7D9FF64708E8",App
-"GF-CP-51", LicensePlate
-"H647KPE", LicensePlate
-"PM-W8011", LicensePlate
-"LK53ABY", LicensePlate
-"SMC1735", LicensePlate
-"somenedapthatdoesnotexist", Nedap
-"somemifarethatdoesnotexist", Mifare
+accessDeviceId, accessDeviceType, locationId
+"00006261-0621-481B-BB13-B89F722B1B8F",Nedap, 1
+"00007B2C-ADD9-4741-9E58-6ADD53A5C7D2",LicensePlate, 1
+"000090CC-F0BF-42A9-BEDD-7D9FF64708E8",App, 1
+"GF-CP-51", LicensePlate, 1
+"H647KPE", LicensePlate, 1
+"PM-W8011", LicensePlate, 1
+"LK53ABY", LicensePlate, 1
+"SMC1735", LicensePlate, 1
+"somenedapthatdoesnotexist", Nedap, 1
+"somemifarethatdoesnotexist", Mifare, 1
