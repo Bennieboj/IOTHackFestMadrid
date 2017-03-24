@@ -1,1 +1,6 @@
 C:\Users\bencl\Desktop\hackfest\BulkInsert\BulkInsert\bin\Debug\BulkInsert.exe.config
+C:\Users\bencl\Desktop\hackfest\BulkInsert\BulkInsert\bin\Debug\BulkInsert.exe
+C:\Users\bencl\Desktop\hackfest\BulkInsert\BulkInsert\bin\Debug\BulkInsert.pdb
+C:\Users\bencl\Desktop\hackfest\BulkInsert\BulkInsert\obj\Debug\BulkInsert.csprojResolveAssemblyReference.cache
+C:\Users\bencl\Desktop\hackfest\BulkInsert\BulkInsert\obj\Debug\BulkInsert.exe
+C:\Users\bencl\Desktop\hackfest\BulkInsert\BulkInsert\obj\Debug\BulkInsert.pdb

@@ -33,14 +33,41 @@ namespace IoTMadridAccessControl.Repositories
         public bool HasAccess(string accessDeviceId, int accessDeviceType, int locationId)
         {
             var command = _sqlConnection.CreateCommand();
-            command.CommandText = string.Format(@"select Id from AccessControlList where AccessDevice = '{0}' and AccessDeviceType = {1} and LocationId = {2}", accessDeviceId, accessDeviceType, locationId);
-            var result = ExecuteQuery(command);
+            command.CommandText = string.Format(@"select Id, PoolId from AccessControlList where AccessDevice = '{0}' and AccessDeviceType = {1} and LocationId = {2}", accessDeviceId, accessDeviceType, locationId);
+            int? aclId = null;
+            int? poolId = null;
+            try
+            {
+                _sqlConnection.Open();
+                var reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    aclId = reader.GetInt32(0);
+                    if (!reader.IsDBNull(1))
+                    {
+                        poolId = reader.GetInt32(1);                                            
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                //either the number of retries specified in the policy is exceeded or there is another exception? 
+                throw e;
+            }
+            finally
+            {
+                _sqlConnection.Close();
+            }
 
-            if (result == null)
+            if (aclId == null)
             {
                 return false;
             }
 
+            if (poolId == null)
+            {
+                return true;
+            }
 
             //check pool
             List<Pool> poolList = new List<Pool>();
@@ -49,10 +76,8 @@ namespace IoTMadridAccessControl.Repositories
                 _sqlConnection.Open();
                 var poolCommand = _sqlConnection.CreateCommand();
                 poolCommand.CommandText = string.Format(@"
-select distinct p.Id, p.MaxAllowed, p.Occupied, p.Hard
-from AccessControlList acl
-join Pool p on p.Id = acl.PoolId
-where acl.Id = {0}", result);
+select p.Id, p.MaxAllowed, p.Occupied, p.Hard
+from Pool p where p.Id = {0}", poolId);
 
                 using (var reader = poolCommand.ExecuteReader())
                 {
@@ -177,6 +202,8 @@ where acl.Id = {0}", result);
 
             return true;
         }
+
+
 
         private object ExecuteQuery(SqlCommand command)
         {

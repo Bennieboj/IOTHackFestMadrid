@@ -22,6 +22,7 @@ namespace BulkInsert
             bulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("AccessDeviceType", "AccessDeviceType"));
             bulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("LocationId", "LocationId"));
             bulk.ColumnMappings.Add(new SqlBulkCopyColumnMapping("ServiceProfileId", "ServiceProfileId"));
+            //bulk.BulkCopyTimeout = 60;
 
             for (int j = 0; j < 920; j++)
             {
