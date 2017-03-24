@@ -1,0 +1,32 @@
+{
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "myEventHubMessage",
+      "path": "authorizationeventhub",
+      "consumerGroup": "readauthorizationeventhub",
+      "connection": "testconnectionstring",
+      "direction": "in"
+    },
+    {
+      "type": "documentDB",
+      "name": "outputDocument",
+      "databaseName": "GlobalStorage",
+      "collectionName": "AllEvents",
+      "createIfNotExists": false,
+      "connection": "octoparkmongodb_DOCUMENTDB",
+      "direction": "out"
+    },
+    {
+        "type": "documentDB",
+        "name": "accessLogDocument",
+        "databaseName": "GlobalStorage",
+        "collectionName": "AccessLog",
+        "createIfNotExists": false,
+        "connection" : "octoparkmongodb_DOCUMENTDB",
+        "direction": "out"
+    }
+  ],
+  "disabled": false,
+  "authLevel": "anonymous"
+}

@@ -1,0 +1,22 @@
+{
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "myEventHubTrigger",
+      "direction": "in",
+      "path": "octoparkhub",
+      "connection": "iothubconnection",
+      "consumerGroup": "function"
+    },
+    {
+      "type": "documentDB",
+      "name": "outputDocument",
+      "databaseName": "GlobalStorage",
+      "collectionName": "Events",
+      "createIfNotExists": true,
+      "connection": "octoparkmongodb_DOCUMENTDB",
+      "direction": "out"
+    }
+  ],
+  "disabled": false
+}

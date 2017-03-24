@@ -1,0 +1,13 @@
+{
+    "name": "IoTMadridFunctions",
+    "version": "1.0.0",
+    "dependencies": {
+        "restler" : "*",
+        "azure-iothub" : "*",
+        "azure-iot-common" : "*",
+        "mongodb": "*",
+        "cuid" : "*",
+        "sugar" : "*",
+        "async" : "*"
+    }
+}
