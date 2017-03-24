@@ -2,7 +2,10 @@
 using IoTMadridAccessControl.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
+using System.Timers;
 
 namespace IoTMadridAccessControl.Tests.Repositories
 {
@@ -12,7 +15,7 @@ namespace IoTMadridAccessControl.Tests.Repositories
         private static readonly string _masterConnectionString = "Server=.;Initial Catalog=master;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=30;";
         private static readonly string _testDbConnectionString = "Server=.;Initial Catalog=TESTIOTMadrid;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=30;";
         //private static readonly string _masterConnectionString = "Server=tcp:iotmadrid.database.windows.net,1433;Initial Catalog=master;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=100;";
-        //private static readonly string _testDbConnectionString = "Server=tcp:iotmadrid.database.windows.net,1433;Initial Catalog=TESTIOTMadrid;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=30;";
+        private static readonly string _testDbConnectionStringAzure = "Server=tcp:iotmadrid.database.windows.net,1433;Initial Catalog=IOTMadrid;Persist Security Info=False;User ID=iotmadrid;Password=IotH4ckF3est!;Connection Timeout=30;";
         private static readonly SqlConnection _masterConnection = new SqlConnection(_masterConnectionString);
         private static readonly SqlConnection _testDbConnection = new SqlConnection(_testDbConnectionString);
 
@@ -51,6 +54,10 @@ DROP DATABASE [TESTIOTMadrid];
             var _testDbConnection = new SqlConnection(_testDbConnectionString);
             _testDbConnection.Open();
             var command = new SqlCommand(@"
+if OBJECT_ID('dbo.AccessControlList_Pool') is not null
+drop table AccessControlList_Pool
+if OBJECT_ID('dbo.Pool') is not null
+drop table Pool
 if OBJECT_ID('dbo.AccessControlList') is not null
 drop table AccessControlList
 if OBJECT_ID('dbo.TimeSlot') is not null
@@ -82,11 +89,12 @@ CREATE TABLE [dbo].[TimeSlot](
 )
 
 create table [dbo].[accesscontrollist](
-	[id] [int] identity(1,1) not null,
-	[accessdevice] [varchar](255) not null,
-	[accessdevicetype] [int] not null,
-	[locationid] [int] not null default (1),
-	[serviceprofileid] [int] not null default (1),
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[AccessDevice] [varchar](255) NOT NULL,
+	[AccessDeviceType] [int] NOT NULL,
+	[LocationId] [int] NOT NULL DEFAULT ((1)),
+	[ServiceProfileId] [int] NOT NULL DEFAULT ((1)),
+	[PoolId] [int] NULL,
 	foreign key (serviceprofileid) references serviceprofile(Id),
 constraint [adadtypelocationid] primary key nonclustered 
 (
@@ -95,13 +103,20 @@ constraint [adadtypelocationid] primary key nonclustered
 	[locationid] asc
 )with (pad_index = off, statistics_norecompute = off, ignore_dup_key = off, allow_row_locks = on, allow_page_locks = on)
 );
+
+CREATE TABLE [dbo].[Pool](
+	[Id] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[MaxAllowed] [int] NOT NULL,
+	[Occupied] [int] NOT NULL,
+	[Hard] [bit] NOT NULL
+);
 ", _testDbConnection);
             command2.ExecuteNonQuery();
             _testDbConnection.Close();
         }
 
         [TestMethod]
-        public void GetByAccessDevice_NotFoundEmpty_ReturnsFalse()
+        public void HasAccess_NotFoundEmpty_ReturnsFalse()
         {
             // Arrange
             var repo = new AccessControlRepository(_testDbConnectionString);
@@ -114,7 +129,7 @@ constraint [adadtypelocationid] primary key nonclustered
         }
 
         [TestMethod]
-        public void GetByAccessDevice_NotFoundWrongRecord_Type_ReturnsFalse()
+        public void HasAccess_NotFoundWrongRecord_Type_ReturnsFalse()
         {
             // Arrange
             int serviceProfileId = InsertServiceProfile("7x24");
@@ -129,7 +144,7 @@ constraint [adadtypelocationid] primary key nonclustered
         }
 
         [TestMethod]
-        public void GetByAccessDevice_NotFoundWrongRecord_Name_ReturnsFalse()
+        public void HasAccess_NotFoundWrongRecord_Name_ReturnsFalse()
         {
             // Arrange
             int serviceProfileId = InsertServiceProfile("7x24");
@@ -144,7 +159,7 @@ constraint [adadtypelocationid] primary key nonclustered
         }
 
         [TestMethod]
-        public void GetByAccessDevice_NotFoundWrongRecord_Location_ReturnsFalse()
+        public void HasAccess_NotFoundWrongRecord_Location_ReturnsFalse()
         {
             // Arrange
             int serviceProfileId = InsertServiceProfile("7x24");
@@ -159,7 +174,138 @@ constraint [adadtypelocationid] primary key nonclustered
         }
 
         [TestMethod]
-        public void GetByAccessDevice_Found_ReturnsTrue()
+        public void CanExit_NotFoundWrongRecord_Type_ReturnsFalse()
+        {
+            // Arrange
+            int serviceProfileId = InsertServiceProfile("7x24");
+            InsertAccessControlListValue("test", 1, 1, serviceProfileId);
+            var repo = new AccessControlRepository(_testDbConnectionString);
+
+            // Act
+            var result = repo.CanExit("test", 2, 1);
+
+            // Assert
+            Assert.AreEqual(false, result);
+        }
+
+        [TestMethod]
+        public void CanExit_NotFoundWrongRecord_Name_ReturnsFalse()
+        {
+            // Arrange
+            int serviceProfileId = InsertServiceProfile("7x24");
+            InsertAccessControlListValue("test", 1, 1, serviceProfileId);
+            var repo = new AccessControlRepository(_testDbConnectionString);
+
+            // Act
+            var result = repo.CanExit("othername", 1, 1);
+
+            // Assert
+            Assert.AreEqual(false, result);
+        }
+
+        [TestMethod]
+        public void CanExit_NotFoundWrongRecord_Location_ReturnsFalse()
+        {
+            // Arrange
+            int serviceProfileId = InsertServiceProfile("7x24");
+            InsertAccessControlListValue("test", 1, 1, serviceProfileId);
+            var repo = new AccessControlRepository(_testDbConnectionString);
+
+            // Act
+            var result = repo.CanExit("test", 1, 2);
+
+            // Assert
+            Assert.AreEqual(false, result);
+        }
+
+
+        [TestMethod]
+        public void CanExit_WithPool_Occupied1()
+        {
+            // Arrange
+            int serviceProfileId = InsertServiceProfile("7x24");
+            int poolId = InsertPool(1, 1, 1);
+            InsertAccessControlListValue("test", 1, 1, serviceProfileId, poolId);
+            var repo = new AccessControlRepository(_testDbConnectionString);
+
+            // Act
+            var result = repo.CanExit("test", 1, 1);
+
+            // Assert
+            Assert.AreEqual(true, result);
+            Assert.AreEqual(0, GetPoolOccupied("test", 1, 1));
+        }
+
+        [TestMethod]
+        public void CanExit_WithPool_Occupied0()
+        {
+            // Arrange
+            int serviceProfileId = InsertServiceProfile("7x24");
+            int poolId = InsertPool(1, 1, 1);
+            InsertAccessControlListValue("test", 1, 1, serviceProfileId, poolId);
+            var repo = new AccessControlRepository(_testDbConnectionString);
+
+            // Act
+            var result = repo.CanExit("test", 1, 1);
+
+            // Assert
+            Assert.AreEqual(true, result);
+            Assert.AreEqual(0, GetPoolOccupied("test", 1, 1));
+        }
+
+        [TestMethod]
+        public void HasAccess_WithPoolUnderMaxAllowed_ReturnsTrue()
+        {
+            // Arrange
+            int serviceProfileId = InsertServiceProfile("7x24");
+            int poolId = InsertPool(1, 0, 1);
+            InsertAccessControlListValue("test", 1, 1, serviceProfileId, poolId);
+            var repo = new AccessControlRepository(_testDbConnectionString);
+
+            // Act
+            var result = repo.HasAccess("test", 1, 1);
+
+            // Assert
+            Assert.AreEqual(true, result);
+            Assert.AreEqual(1, GetPoolOccupied("test", 1, 1));
+        }
+
+        [TestMethod]
+        public void HasAccess_WithPoolEqualToMaxAllowed_ReturnsFalse()
+        {
+            // Arrange
+            int serviceProfileId = InsertServiceProfile("7x24");
+            int poolId = InsertPool(1, 1, 1);
+            InsertAccessControlListValue("test", 1, 1, serviceProfileId, poolId);
+            var repo = new AccessControlRepository(_testDbConnectionString);
+
+            // Act
+            var result = repo.HasAccess("test", 1, 1);
+
+            // Assert
+            Assert.AreEqual(false, result);
+            Assert.AreEqual(1, GetPoolOccupied("test", 1, 1));
+        }
+
+        [TestMethod]
+        public void HasAccess_WithPoolOverMaxAllowed_ReturnsFalse()
+        {
+            // Arrange
+            int serviceProfileId = InsertServiceProfile("7x24");
+            int poolId = InsertPool(1, 2, 1);
+            InsertAccessControlListValue("test", 1, 1, serviceProfileId, poolId);
+            var repo = new AccessControlRepository(_testDbConnectionString);
+
+            // Act
+            var result = repo.HasAccess("test", 1, 1);
+
+            // Assert
+            Assert.AreEqual(false, result);
+            Assert.AreEqual(2, GetPoolOccupied("test", 1, 1));
+        }
+
+        [TestMethod]
+        public void HasAccess_WithoutPool_Found_ReturnsTrue()
         {
             // Arrange
             int serviceProfileId = InsertServiceProfile("7x24");
@@ -228,6 +374,40 @@ constraint [adadtypelocationid] primary key nonclustered
             Assert.AreEqual(2, result.Count(t => t.DayOfWeek == 6));
         }
 
+        private static int GetPoolOccupied(string accessDeviceId, int accessDeviceType, int locationId)
+        {
+            _testDbConnection.Open();
+            var command = new SqlCommand(string.Format(@"
+select p.Occupied
+from AccessControlList acl
+join Pool p on p.Id = acl.PoolId
+where acl.AccessDevice = '{0}'
+and acl.AccessDeviceType = {1}
+and acl.LocationId = {2}", accessDeviceId, accessDeviceType, locationId), _testDbConnection);
+            var poolOccupied = (int)command.ExecuteScalar();
+            _testDbConnection.Close();
+            return poolOccupied;
+        }
+
+        private static int InsertPool(int maxAllowed, int occupied, int hard)
+        {
+            _testDbConnection.Open();
+            var command = new SqlCommand(string.Format(@"
+INSERT INTO [dbo].[Pool]
+           ([MaxAllowed]
+           ,[Occupied]
+           ,[Hard])
+     VALUES
+           ({0}
+           ,{1}
+           ,{2});
+SELECT CAST(scope_identity() AS int);
+", maxAllowed, occupied, hard), _testDbConnection);
+            var poolId = (int)command.ExecuteScalar();
+            _testDbConnection.Close();
+            return poolId;
+        }
+
         private static int InsertServiceProfile(string serviceProfileName)
         {
             _testDbConnection.Open();
@@ -235,16 +415,12 @@ constraint [adadtypelocationid] primary key nonclustered
 INSERT INTO [dbo].[ServiceProfile]
            ([Name])
      VALUES
-           ('{0}')
+           ('{0}');
+SELECT CAST(scope_identity() AS int);
 ", serviceProfileName), _testDbConnection);
-            command.ExecuteNonQuery();
-
-            var commandGetId = new SqlCommand(string.Format(@"
-select Id from ServiceProfile where Name = '{0}'
-", serviceProfileName), _testDbConnection);
-            var spId = commandGetId.ExecuteScalar();
+            var spId = (int)command.ExecuteScalar();
             _testDbConnection.Close();
-            return (int)spId;
+            return spId;
         }
 
         private static void InsertTimeSlots(int serviceProfileId, int startHour, int startMinutes, int endHour, int endMinutes)
@@ -273,7 +449,7 @@ INSERT INTO [dbo].[TimeSlot]
             _testDbConnection.Close();
         }
 
-        private static void InsertAccessControlListValue(string accessDeviceId, int accessDeviceType, int locationId, int serviceProfileId)
+        private static void InsertAccessControlListValue(string accessDeviceId, int accessDeviceType, int locationId, int serviceProfileId, int? poolId = null)
         {
             _testDbConnection.Open();
             var command = new SqlCommand(string.Format(@"
@@ -281,10 +457,10 @@ INSERT INTO AccessControlList
 		(AccessDevice
 		,AccessDeviceType
         ,LocationId
-		,ServiceProfileId)
+		,ServiceProfileId
+        ,PoolId)
 	VALUES
-		('{0}',{1}, {2}, {3})
-", accessDeviceId, accessDeviceType, locationId, serviceProfileId), _testDbConnection);
+		('{0}',{1}, {2}, {3}, {4})", accessDeviceId, accessDeviceType, locationId, serviceProfileId, poolId.HasValue?poolId.ToString():"NULL"), _testDbConnection);
             command.ExecuteNonQuery();
             _testDbConnection.Close();
         }

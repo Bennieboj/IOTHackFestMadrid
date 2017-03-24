@@ -1,13 +1,16 @@
 USE [IOTMadrid]
 GO
 
+--if OBJECT_ID('dbo.AccessControlList_Pool') is not null
+--drop table AccessControlList_Pool
+--if OBJECT_ID('dbo.Pool') is not null
+--drop table Pool
 --if OBJECT_ID('dbo.TimeSlot') is not null
 --drop table TimeSlot
 --if OBJECT_ID('dbo.AccessControlList') is not null
 --drop table AccessControlList
 --if OBJECT_ID('dbo.ServiceProfile') is not null
 --drop table ServiceProfile
-
 
 
 --CREATE TABLE [dbo].[ServiceProfile](
@@ -46,4 +49,12 @@ GO
 --)
 
 --GO
+--CREATE UNIQUE INDEX UXId_AccessControlList ON AccessControlList(Id)
+
+--CREATE TABLE [dbo].[Pool](
+--	[Id] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
+--	[MaxAllowed] [int] NOT NULL,
+--	[Occupied] [int] NOT NULL,
+--	[Hard] [bit] NOT NULL
+--)
 
